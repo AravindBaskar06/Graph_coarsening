@@ -81,7 +81,7 @@ while count < max_iter:  # Set a iteration limit to avoid indefinite loop
         Source = [ind[k] for k in source]
         Target = [ind[k] for k in target]
     V = [1 for k in range(len(Source))]
-    Ak = sparse.coo_matrix((V, (Source, Target)), shape=(roll, roll)).toarray()
+    Ak = sparse.csr_matrix((V, (Source, Target)), shape=(roll, roll)).toarray()
     Ak = Ak - np.diag(np.diag(Ak))
     source = Source
     target = Target
