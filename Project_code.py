@@ -62,7 +62,7 @@ while count < max_iter:  # Set a iteration limit to avoid indefinite loop
     roll = 0
     for a in sscore:
         if ind[a] == 0:
-            roll = roll + 1
+            roll += 1
             broll = roll
             ind[a] = broll
         else:
