@@ -1,3 +1,7 @@
+# Deep Learning with Graphs
+# Course project: Coarsening graph networks which arise in the optimal design of robotic mechanisms
+# Author: Aravind Baskar
+
 # Import necessary libraries
 import networkx as nx
 import matplotlib.pyplot as plt
