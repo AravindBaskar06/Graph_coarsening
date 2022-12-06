@@ -6,18 +6,18 @@ from scipy import sparse
 
 # Initialize the original graph and the seed for initial layout
 # Example 1
-# source = [0, 0, 1, 1, 2, 3, 3, 4, 4, 4, 4, 4, 5, 5, 6, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 14, 15, 16, 16, 17, 17, 18, 18, 19, 19, 20]
-# target = [1, 2, 0, 3, 0, 1, 4, 3, 5, 7, 8, 9, 4, 6, 5, 7, 8, 4, 6, 4, 6, 4, 10, 9, 11, 10, 12, 11, 16, 14, 15, 13, 16, 17, 13, 12, 14, 14, 18, 17, 19, 18, 20, 19]
+#source = [0, 0, 1, 1, 2, 3, 3, 4, 4, 4, 4, 4, 5, 5, 6, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 14, 15, 16, 16, 17, 17, 18, 18, 19, 19, 20]
+#target = [1, 2, 0, 3, 0, 1, 4, 3, 5, 7, 8, 9, 4, 6, 5, 7, 8, 4, 6, 4, 6, 4, 10, 9, 11, 10, 12, 11, 16, 14, 15, 13, 16, 17, 13, 12, 14, 14, 18, 17, 19, 18, 20, 19]
 
 # Example 2
-# source = [0, 1, 2, 3, 4, 5, 6, 0, 3, 8, 4, 10, 1, 2, 3, 4, 5, 6, 0, 7, 8, 9, 10, 11]
-# target = [1, 2, 3, 4, 5, 6, 0, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 0, 3, 8, 4, 10]
+#source = [0, 1, 2, 3, 4, 5, 6, 0, 3, 8, 4, 10, 1, 2, 3, 4, 5, 6, 0, 7, 8, 9, 10, 11]
+#target = [1, 2, 3, 4, 5, 6, 0, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 0, 3, 8, 4, 10]
 
 # Example 3
 source = [0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0, 6]
 target = [1, 2, 3, 4, 5, 0, 6, 0, 1, 2, 3, 4, 5, 0]
 
-seed = 48
+seed = 100
 
 # Construct the adjacency matrix from the edge lists
 m = max(max(source), max(target)) + 1
@@ -114,7 +114,7 @@ while count < max_iter:  # Set an iteration limit to avoid indefinite loop
             continue
         bool = True
         for c in nlist:
-            if (ind[c] == 0) and (score[c] >= nscore):
+            if (ind[c] == 0) and (0 <= score[c] - nscore < 1):
                 if bool:
                     ind[c] = roll
                     counter += 1
