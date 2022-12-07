@@ -99,20 +99,20 @@ while count < max_iter:  # Set an iteration limit to avoid indefinite loop
         break
 
     # Coarsening grouping is done via spectral grouping following Webb et al.
-    sscore = np.argsort(score)
+    sort_score = np.argsort(score)
 
     # Spectral grouping is based on the eigenvector centrality
     ind = np.zeros(len(nodes))
     roll = 0
     counter = 0
     check = 0
-    nweights = []
-    for a in sscore:
+    n_weights = []
+    for a in sort_score:
         nlist = [b for b in Gk.neighbors(a)]
-        nscore = min([score[b] for b in nlist])
+        n_score = min([score[b] for b in nlist])
         if ind[a] == 0:
             if counter != 0:
-                nweights.append(counter)
+                n_weights.append(counter)
             roll += 1
             counter = 0
             ind[a] = roll
@@ -120,14 +120,14 @@ while count < max_iter:  # Set an iteration limit to avoid indefinite loop
             print("Assign type-A: " + str(a) + " Group: " + str(roll - 1))
         else:
             continue
-        bool = True
+        tf_cond = True
         for c in nlist:
-            if (ind[c] == 0) and (0 <= score[c] - nscore < 0.1):
-                if bool:
+            if (ind[c] == 0) and (0 <= score[c] - n_score < 0.33):
+                if tf_cond:
                     ind[c] = roll
                     counter += 1
                     check = score[c]
-                    bool = False
+                    tf_cond = False
                     print("Assign type-B: " + str(c) + " Group: " + str(roll - 1))
                 else:
                     if score[c] <= check:
@@ -142,13 +142,13 @@ while count < max_iter:  # Set an iteration limit to avoid indefinite loop
                         print("Assign type-C: " + str(d) + " Group: " + str(roll - 1))
                         ind[d] = roll
                         counter += 1
-    if len(nweights) < roll:
-        nweights.append(counter)
+    if len(n_weights) < roll:
+        n_weights.append(counter)
 
     ind = [int(k - 1) for k in ind]
 
-    nweights = [int(k - 1) for k in nweights]
-    # nweights = nweights/np.linalg.norm(nweights)
+    n_weights = [int(k - 1) for k in n_weights]
+    # n_weights = n_weights/np.linalg.norm(n_weights)
 
     print([[i, j] for i, j in zip(ind, score)])
 
@@ -158,7 +158,7 @@ while count < max_iter:  # Set an iteration limit to avoid indefinite loop
     V = [1 for k in range(len(Source))]
     Ak = sparse.csr_matrix((V, (Source, Target)), shape=(roll, roll)).toarray()
     Ak = np.where(Ak > 0, 1, 0)
-    Ak = Ak - np.diag(np.diag(Ak)) + np.diag(nweights)
+    Ak = Ak - np.diag(np.diag(Ak)) + np.diag(n_weights)
     source = Source
     target = Target
 
@@ -166,8 +166,9 @@ while count < max_iter:  # Set an iteration limit to avoid indefinite loop
     centroids = []
     for k in range(roll):
         t = [j == k for j in ind]
-        centroids.append(sum([score[i] * layout[i] for i, x in enumerate(t) if x]) / sum(
-            [score[i] for i, x in enumerate(t) if x]))  # Replace score[i] by 1 for simple centroid rule
+        centroids.append(sum([score[i] * layout[i] for i, x in enumerate(t) if x]) /
+                         sum([score[i] for i, x in enumerate(t) if x]))
+        # Replace score[i] by 1 in the above for simple centroid rule
 
     layout = dict(zip([j for j in range(roll)], centroids))
     count += 1
