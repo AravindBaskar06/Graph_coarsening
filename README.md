@@ -1,1 +1,1 @@
-# This project aims to develop a graph coarsening scheme to cluster nodes using a centrality measure 
+# This project aims to develop a coarsening scheme to cluster nodes in graphs that arise in the design of robotic mechanisms using centrality measures and other custom measures specific to the application.
